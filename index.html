@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部門應用程式網站 (優化設定版)</title>
+    <title>部門應用程式網站 (安全設定版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -148,7 +148,7 @@
         }
         
         /* ---------------------------------- */
-        /* 4. 設定按鈕樣式 (已修改為右上角) */
+        /* 4. 設定按鈕樣式 (右上角) */
         /* ---------------------------------- */
         #settings-btn {
             background-color: #555;
@@ -159,7 +159,6 @@
             cursor: pointer;
             font-size: 16px;
             
-            /* 【修正為右上角】 */
             position: absolute; 
             top: 30px; 
             right: 20px; 
@@ -333,7 +332,7 @@
     <div class="button-grid" id="button-grid">
         </div>
     
-    <button id="settings-btn" onclick="openModal()">
+    <button id="settings-btn" onclick="authenticateAndOpenModal()">
         <i class="fas fa-cog"></i> 設定
     </button>
     
@@ -498,8 +497,10 @@
             saveButtons();
             renderMainButtons();
         }
+
+        // 8. Modal 彈窗控制 (已修改：加入指紋認證/WebAuthn)
         
-        // 8. Modal 彈窗控制
+        // 彈出 Modal 視窗
         function openModal() {
             renderSettingsList(); 
             settingsModal.style.display = "block";
@@ -513,6 +514,48 @@
             settingsModal.style.display = "none";
         }
         
+        // 【新增函數】處理指紋/WebAuthn 認證邏輯
+        async function authenticateAndOpenModal() {
+            if (window.location.protocol !== 'https:') {
+                alert("警告：生物識別認證必須在 HTTPS 協議下才能正常工作。目前將直接進入設定頁面。");
+                openModal();
+                return;
+            }
+
+            if (!navigator.credentials) {
+                alert("此瀏覽器不支援 Web Authentication API。將直接進入設定頁面。");
+                openModal();
+                return;
+            }
+
+            // 嘗試使用 WebAuthn API 進行認證（模擬指紋/裝置密碼）
+            try {
+                // 這裡的選項是 WebAuthn 憑證獲取過程的簡化。
+                // 由於沒有後端進行註冊，我們使用一個 generic 的公鑰選項。
+                // 
+                // 由於是前端模擬，我們不能使用真正的用戶 ID 或挑戰碼，
+                // 這裡的目的是讓瀏覽器彈出內建的安全提示。
+                
+                await navigator.credentials.get({
+                    publicKey: {
+                        // 這裡使用一個不存在的挑戰碼，只是為了觸發瀏覽器安全提示
+                        challenge: Uint8Array.from('dummy-challenge-for-auth', c => c.charCodeAt(0)), 
+                        allowCredentials: [], // 不預期有已註冊的憑證
+                        timeout: 60000,
+                        userVerification: 'required', // 要求生物識別或裝置鎖定
+                    }
+                });
+                
+                // 認證成功（用戶通過指紋/密碼）
+                openModal();
+
+            } catch (error) {
+                console.error("認證失敗或取消:", error);
+                // 認證失敗（用戶取消或未通過）
+                alert("認證失敗或已取消，無法進入設定頁面。");
+            }
+        }
+
         // 點擊 Modal 外部關閉
         window.onclick = function(event) {
             if (event.target == settingsModal) {
