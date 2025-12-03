@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部門應用程式網站 (安全設定版)</title>
+    <title>部門應用程式網站 (安全與介面優化版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -20,12 +20,14 @@
             padding: 30px 10px;
             margin: 0;
             min-height: 100vh;
-            position: relative; /* 確保 #settings-btn 的 absolute 定位是相對於 body */
+            position: relative; 
         }
 
         .header-container {
             text-align: center;
             margin-bottom: 40px;
+            width: 100%;
+            max-width: 720px;
         }
 
         h1 {
@@ -46,14 +48,16 @@
             width: 720px; 
             gap: 60px; 
             justify-content: center;
-            margin-bottom: 40px;
+            /* 調整 margin-bottom 以為底部的設定按鈕留出空間 */
+            margin-bottom: 120px; 
         }
 
         /* ---------------------------------- */
-        /* 2. 主頁按鈕 (連結) 的通用樣式 */
+        /* 2. 主頁按鈕 (連結) 的通用樣式 (網址按鈕 & 設定按鈕 共用) */
         /* ---------------------------------- */
 
-        .btn-link {
+        .btn-style {
+            /* 基礎尺寸和排版 */
             width: 200px;
             height: 200px;
             text-decoration: none; 
@@ -70,39 +74,23 @@
             align-items: center;
             text-align: center;
 
-            /* 陰影和懸浮效果 */
+            /* 橘色高光樣式 */
             box-shadow: 0 4px 0 #D46900; 
             transition: transform 0.1s, box-shadow 0.1s;
-
-            /* 橘色漸變背景 (模擬圖片二) */
             background: linear-gradient(to bottom, #FF8C00, #FF7F00); 
         }
 
-        .btn-link:hover {
+        .btn-style:hover {
             transform: translateY(2px); 
             box-shadow: 0 2px 0 #D46900;
         }
 
-        .btn-link:active {
+        .btn-style:active {
             transform: translateY(4px);
             box-shadow: 0 0 0 #D46900;
         }
 
-        .btn-icon {
-            font-size: 80px; 
-            margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
-        }
-        
-        .btn-text {
-            font-size: 16px;
-            font-weight: bold;
-            line-height: 1.2;
-            padding: 0 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
-        }
-
-        .btn-link::before {
+        .btn-style::before {
             content: '';
             position: absolute;
             top: 0;
@@ -119,9 +107,76 @@
             );
             pointer-events: none;
         }
+
+        /* ---------------------------------- */
+        /* 3. 按鈕內容樣式 (網址按鈕) */
+        /* ---------------------------------- */
+        
+        .btn-icon {
+            font-size: 80px; 
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
+        }
+        
+        .btn-text {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.2;
+            padding: 0 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
+        }
         
         /* ---------------------------------- */
-        /* 3. 手機模式優化 (MEDIA QUERY - 主頁) */
+        /* 4. 設定按鈕樣式 (置底置中) */
+        /* ---------------------------------- */
+        #settings-btn-wrapper {
+            /* 讓設定按鈕固定在畫面底部置中 */
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        #settings-btn {
+            /* 讓設定按鈕套用與網址按鈕相同的樣式 */
+            width: 180px; /* 稍微小一點 */
+            height: 60px;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            margin: 0;
+            /* 覆寫網址按鈕的通用樣式以適應尺寸 */
+            border-radius: 10px;
+            box-shadow: 0 3px 0 #D46900; 
+        }
+
+        #settings-btn i {
+            font-size: 20px;
+            margin-right: 8px;
+        }
+        
+        #settings-btn:hover {
+            transform: translateY(1px); 
+            box-shadow: 0 2px 0 #D46900;
+        }
+
+        #settings-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 0 0 #D46900;
+        }
+        
+        #settings-btn::before {
+             border-radius: 10px; /* 匹配按鈕新的圓角 */
+        }
+        
+        /* ---------------------------------- */
+        /* 5. 手機模式優化 (MEDIA QUERY - 主頁) */
         /* ---------------------------------- */
         @media (max-width: 768px) {
             
@@ -130,9 +185,11 @@
                 max-width: 480px; 
                 gap: 20px; 
                 padding: 0 10px;
+                /* 確保手機底部有空間顯示設定按鈕 */
+                margin-bottom: 100px;
             }
 
-            .btn-link {
+            .btn-style {
                 width: calc(50% - 10px); 
                 height: 140px; 
                 border-radius: 15px; 
@@ -145,41 +202,15 @@
             .btn-text {
                 font-size: 14px;
             }
+            
+            .header-container {
+                /* 移除為右上角設定按鈕預留的空間 */
+                padding-right: 0; 
+            }
         }
         
         /* ---------------------------------- */
-        /* 4. 設定按鈕樣式 (右上角) */
-        /* ---------------------------------- */
-        #settings-btn {
-            background-color: #555;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 16px;
-            
-            position: absolute; 
-            top: 30px; 
-            right: 20px; 
-            
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            z-index: 100;
-        }
-        /* 在手機模式下，確保它不會與標題重疊 */
-        @media (max-width: 768px) {
-            #settings-btn {
-                top: 15px;
-                padding: 8px 15px;
-            }
-            .header-container {
-                /* 在手機上給標題留出右邊空間 */
-                padding-right: 80px; 
-            }
-        }
-
-        /* ---------------------------------- */
-        /* 5. Modal 彈窗樣式 */
+        /* 6. Modal / 設定列表 / 表單 樣式 (與上次相同) */
         /* ---------------------------------- */
         .modal {
             display: none; 
@@ -204,7 +235,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
-        /* 新增按鈕表單佈局優化 */
         .new-btn-form {
             display: grid;
             grid-template-columns: 1fr 1fr; 
@@ -212,7 +242,6 @@
             align-items: end;
         }
         
-        /* 將新增按鈕移動到第二行，佔滿兩欄 */
         .new-btn-form button[type="submit"] {
             grid-column: 1 / 3; 
             padding: 12px 10px;
@@ -237,10 +266,7 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
-
-        /* ---------------------------------- */
-        /* 6. 設定列表樣式 */
-        /* ---------------------------------- */
+        
         .setting-item {
             display: flex;
             align-items: center;
@@ -261,7 +287,7 @@
             border-radius: 4px;
             min-width: 100px; 
         }
-        /* 讓前兩個輸入欄（名稱）在桌機上佔用較少空間 */
+
         .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
             max-width: 150px;
         }
@@ -289,12 +315,8 @@
             cursor: pointer;
         }
 
-        /* ---------------------------------- */
-        /* 7. 手機模式優化 (MEDIA QUERY - 設定頁面) */
-        /* ---------------------------------- */
         @media (max-width: 768px) {
             
-            /* 讓 Modal 幾乎佔滿整個手機畫面 */
             .modal-content {
                 margin: 0;
                 width: 100%;
@@ -302,7 +324,6 @@
                 border-radius: 0;
             }
             
-            /* 設定列表中的輸入框也應佔滿一行 */
             .setting-item input[type="text"] {
                 flex-grow: 1;
                 margin-right: 0;
@@ -314,7 +335,6 @@
                 max-width: none; 
             }
 
-            /* 刪除按鈕單獨一行 */
             .setting-item .delete-btn {
                 width: 100%;
                 margin-top: 5px;
@@ -332,9 +352,11 @@
     <div class="button-grid" id="button-grid">
         </div>
     
-    <button id="settings-btn" onclick="authenticateAndOpenModal()">
-        <i class="fas fa-cog"></i> 設定
-    </button>
+    <div id="settings-btn-wrapper">
+        <button id="settings-btn" class="btn-style" onclick="authenticateAndOpenModal()">
+            <i class="fas fa-cog"></i> 設定
+        </button>
+    </div>
     
 
     <div id="settingsModal" class="modal">
@@ -370,6 +392,9 @@
 
 
     <script>
+        // 預設密碼 (請自行修改，例如改成複雜的數字/英文字母組合)
+        const SETTINGS_PASSWORD = "1429"; 
+        
         // 預設按鈕資料：包含英文名稱 (en) 和中文名稱 (cn)
         const defaultButtons = [
             { en: "Machine-NG", cn: "機械管理", url: "https://dereklin1429.github.io/Machine-NG/", icon: "fa-arrow-right" },
@@ -416,8 +441,9 @@
                     nameToDisplay += `<br>(${btn.cn.trim()})`;
                 }
                 
+                // 使用 btn-style 樣式類別
                 const link = document.createElement('a');
-                link.className = 'btn-link';
+                link.className = 'btn-style'; 
                 link.href = btn.url;
                 link.target = '_blank';
                 link.innerHTML = `
@@ -497,9 +523,9 @@
             saveButtons();
             renderMainButtons();
         }
-
-        // 8. Modal 彈窗控制 (已修改：加入指紋認證/WebAuthn)
         
+        // 8. Modal 彈窗控制 (已修改：加入密碼認證模擬)
+
         // 彈出 Modal 視窗
         function openModal() {
             renderSettingsList(); 
@@ -514,46 +540,18 @@
             settingsModal.style.display = "none";
         }
         
-        // 【新增函數】處理指紋/WebAuthn 認證邏輯
-        async function authenticateAndOpenModal() {
-            if (window.location.protocol !== 'https:') {
-                alert("警告：生物識別認證必須在 HTTPS 協議下才能正常工作。目前將直接進入設定頁面。");
+        // 【新增函數】處理密碼認證邏輯 (模擬 QR/指紋認證)
+        function authenticateAndOpenModal() {
+            const password = prompt("請輸入管理密碼進入設定頁面：");
+            
+            if (password === SETTINGS_PASSWORD) {
+                // 密碼正確
                 openModal();
-                return;
+            } else if (password !== null) {
+                // 輸入錯誤
+                alert("密碼錯誤，無法進入設定頁面。");
             }
-
-            if (!navigator.credentials) {
-                alert("此瀏覽器不支援 Web Authentication API。將直接進入設定頁面。");
-                openModal();
-                return;
-            }
-
-            // 嘗試使用 WebAuthn API 進行認證（模擬指紋/裝置密碼）
-            try {
-                // 這裡的選項是 WebAuthn 憑證獲取過程的簡化。
-                // 由於沒有後端進行註冊，我們使用一個 generic 的公鑰選項。
-                // 
-                // 由於是前端模擬，我們不能使用真正的用戶 ID 或挑戰碼，
-                // 這裡的目的是讓瀏覽器彈出內建的安全提示。
-                
-                await navigator.credentials.get({
-                    publicKey: {
-                        // 這裡使用一個不存在的挑戰碼，只是為了觸發瀏覽器安全提示
-                        challenge: Uint8Array.from('dummy-challenge-for-auth', c => c.charCodeAt(0)), 
-                        allowCredentials: [], // 不預期有已註冊的憑證
-                        timeout: 60000,
-                        userVerification: 'required', // 要求生物識別或裝置鎖定
-                    }
-                });
-                
-                // 認證成功（用戶通過指紋/密碼）
-                openModal();
-
-            } catch (error) {
-                console.error("認證失敗或取消:", error);
-                // 認證失敗（用戶取消或未通過）
-                alert("認證失敗或已取消，無法進入設定頁面。");
-            }
+            // 如果 password 是 null (使用者按取消)，則不執行任何操作
         }
 
         // 點擊 Modal 外部關閉
