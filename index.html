@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>木質遊戲按鈕範例 - 完整程式碼</title>
+    <title>部門應用程式網站</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -12,163 +12,160 @@
         /* ---------------------------------- */
 
         body {
-            background-color: #A9A9A9; /* 模擬圖片中的灰色背景 */
+            background-color: #A9A9A9; /* 保持中性灰色背景 */
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            padding: 30px;
+            margin: 0;
+            min-height: 100vh;
         }
 
         h1 {
             color: #444;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .button-grid {
             display: flex;
-            flex-wrap: wrap; /* 允許項目換行 */
-            width: 600px; /* 3 個按鈕，每個約 180px 寬，加上間距 */
-            gap: 20px; /* 按鈕之間的間距 */
+            flex-wrap: wrap; 
+            width: 720px; /* 3 個按鈕 (200px) + 間距 (2 x 60px) */
+            gap: 60px; /* 按鈕之間的間距 */
             justify-content: center;
         }
 
-        .btn {
-            width: 180px;
-            height: 180px;
-            border: none;
-            border-radius: 25px; /* 圓角 */
+        /* ---------------------------------- */
+        /* 2. 按鈕 (<a> 標籤) 的通用樣式 */
+        /* ---------------------------------- */
+
+        .btn-link {
+            width: 200px;
+            height: 200px;
+            text-decoration: none; /* 移除超連結下劃線 */
+            color: #fff; /* 文字和圖標顏色 */
+            border-radius: 20px; /* 圓角 */
             cursor: pointer;
-            font-size: 40px;
+            box-sizing: border-box; 
+            position: relative; /* 用於陰影 */
+            overflow: hidden; /* 確保高光不溢出 */
+            
+            /* 內容垂直水平居中 */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+
+            /* 陰影和懸浮效果 */
+            box-shadow: 0 4px 0 #D46900; /* 底部陰影 */
+            transition: transform 0.1s, box-shadow 0.1s;
+
+            /* 橘色漸變背景 (模擬圖片二) */
+            background: linear-gradient(to bottom, #FF8C00, #FF7F00); 
+        }
+
+        .btn-link:hover {
+            transform: translateY(2px); /* 點擊/懸停時下壓效果 */
+            box-shadow: 0 2px 0 #D46900;
+        }
+
+        /* 點擊時的下壓效果 */
+        .btn-link:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #D46900;
+        }
+
+        /* ---------------------------------- */
+        /* 3. 圖標和文字樣式 */
+        /* ---------------------------------- */
+
+        .btn-icon {
+            font-size: 80px; /* 圖標大小 */
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 輕微文字陰影 */
+        }
+        
+        .btn-text {
+            font-size: 16px;
             font-weight: bold;
-            color: white;
-            box-sizing: border-box; /* 確保 padding 和 border 在寬度內 */
-            position: relative; /* 用於陰影和木托 */
-            transition: transform 0.1s;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px); /* 懸停時輕微上移 */
+            line-height: 1.2;
+            padding: 0 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* 輕微文字陰影 */
         }
 
         /* ---------------------------------- */
-        /* 2. 模擬木質底座效果 */
+        /* 4. 模擬圖片二的光澤效果 */
         /* ---------------------------------- */
-        /* 圖片中所有按鈕下方都有一個深色木托底座 */
-        .btn::after {
+
+        .btn-link::before {
             content: '';
             position: absolute;
-            bottom: -15px; /* 讓底座露出來 */
+            top: 0;
             left: 0;
             width: 100%;
-            height: 30px;
-            border-radius: 25px;
-            /* 模擬深色木托 */
-            background: #382419; 
-            box-shadow: 0 5px 0 #21150f; /* 底部陰影 */
-            z-index: -1; /* 放在按鈕下方 */
-        }
-
-
-        /* ---------------------------------- */
-        /* 3. 按鈕的顏色和圖案 (實色按鈕) */
-        /* ---------------------------------- */
-
-        /* 綠色叉 (X) - 實色 */
-        .green.solid {
-            background: linear-gradient(to bottom, #7CD33B, #539827); /* 顏色漸變 */
-            box-shadow: 0 8px 0 #539827, inset 0 3px 0 rgba(255, 255, 255, 0.5); /* 底部厚度和光澤 */
-            color: white;
-        }
-        /* 黃色 Ok - 實色 */
-        .orange.solid {
-            background: linear-gradient(to bottom, #FFD700, #F7931E);
-            box-shadow: 0 8px 0 #F7931E, inset 0 3px 0 rgba(255, 255, 255, 0.5);
-            color: white;
-        }
-        /* 紅色勾 (Check) - 實色 */
-        .red.solid {
-            background: linear-gradient(to bottom, #FF4500, #DC143C);
-            box-shadow: 0 8px 0 #DC143C, inset 0 3px 0 rgba(255, 255, 255, 0.5);
-            color: white;
-        }
-
-        /* ---------------------------------- */
-        /* 4. 木質紋理按鈕 */
-        /* ---------------------------------- */
-
-        .brown.texture {
-            /* 模擬木頭的顏色 */
-            background-color: #794D31; 
-            /* 複雜的漸變和陰影來模擬木質紋理和光澤 */
-            background-image: 
-                /* 淺色木紋線條 */
-                repeating-linear-gradient(
-                    45deg,
-                    rgba(255, 255, 255, 0.05) 0,
-                    rgba(255, 255, 255, 0.05) 5px,
-                    transparent 5px,
-                    transparent 10px
-                ),
-                /* 深色木紋線條 */
-                repeating-linear-gradient(
-                    -45deg,
-                    rgba(0, 0, 0, 0.1) 0,
-                    rgba(0, 0, 0, 0.1) 5px,
-                    transparent 5px,
-                    transparent 10px
-                ),
-                /* 中央的高光和漸變 */
-                radial-gradient(
-                    circle at center,
-                    rgba(255, 255, 255, 0.1) 0%,
-                    #794D31 70%
-                );
-
-            /* 底部厚度和光澤 */
-            box-shadow: 0 8px 0 #5B3B26, inset 0 3px 5px rgba(255, 255, 255, 0.3), inset 0 -3px 5px rgba(0, 0, 0, 0.3);
-            color: white; /* 圖標/文字顏色 */
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); /* 給文字加一點陰影 */
-        }
-
-        /* ---------------------------------- */
-        /* 5. 確保圖標在木紋按鈕上居中且清晰 */
-        /* ---------------------------------- */
-
-        .brown.texture i, .brown.texture {
-            /* 在木紋按鈕上調整圖標/文字大小，使其看起來更像雕刻的 */
-            font-size: 50px;
-            color: white; 
-            /* 模擬雕刻的內陰影效果 */
-            text-shadow: -1px -1px 0 #4C3224, 1px 1px 0 #A86F4E; 
-        }
-        .brown.texture:nth-child(2) i, .brown.texture:nth-child(3) i {
-            font-size: 70px; /* 讓第一個木紋按鈕上的 'X' 更大一點 */
-        }
-
-        /* 修正 Ok 文字的內陰影 */
-        .brown.texture:nth-child(5), .brown.texture:nth-child(6) {
-            font-size: 55px;
-            text-shadow: -1px -1px 0 #4C3224, 1px 1px 0 #A86F4E; 
+            height: 100%;
+            border-radius: 20px;
+            /* 創造高光反射效果 (使用線性漸變) */
+            background: linear-gradient(
+                to bottom,
+                rgba(255, 255, 255, 0.5) 0%,
+                rgba(255, 255, 255, 0.0) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            pointer-events: none; /* 讓點擊事件穿透高光層 */
         }
     </style>
 </head>
 <body>
 
-    <h1>🎮 木質遊戲按鈕範例</h1>
+    <h1>🏢 部門應用程式索引</h1>
 
     <div class="button-grid">
-        <button class="btn green solid"><i class="fas fa-times"></i></button>
-        <button class="btn brown texture"><i class="fas fa-times"></i></button>
-        <button class="btn brown texture"><i class="fas fa-times"></i></button>
+        <a class="btn-link" href="https://dereklin1429.github.io/Machine-NG/" target="_blank">
+            <i class="fas fa-arrow-right btn-icon"></i>
+            <span class="btn-text">Machine-NG</span>
+        </a>
 
-        <button class="btn orange solid">Ok</button>
-        <button class="btn brown texture">Ok</button>
-        <button class="btn brown texture">Ok</button>
+        <a class="btn-link" href="https://dereklin1429.github.io/5S-audit/" target="_blank">
+            <i class="fas fa-arrow-circle-right btn-icon"></i>
+            <span class="btn-text">5S Audit</span>
+        </a>
 
-        <button class="btn red solid"><i class="fas fa-check"></i></button>
-        <button class="btn brown texture"><i class="fas fa-check"></i></button>
-        <button class="btn brown texture"><i class="fas fa-check"></i></button>
+        <a class="btn-link" href="https://dereklin1429.github.io/repair-history/" target="_blank">
+            <i class="fas fa-play btn-icon"></i>
+            <span class="btn-text">Repair Record<br>(機械維修紀錄)</span>
+        </a>
+
+        <a class="btn-link" href="https://dereklin1429.github.io/-MC-maintenance-check/" target="_blank">
+            <i class="fas fa-angle-double-right btn-icon"></i>
+            <span class="btn-text">Periodic Maintenance<br>(設備保養查核)</span>
+        </a>
+
+        <a class="btn-link" href="https://chiehs1429.github.io/Mixing/" target="_blank">
+            <i class="fas fa-caret-right btn-icon"></i>
+            <span class="btn-text">Mixing</span>
+        </a>
+
+        <a class="btn-link" href="https://chiehs1429.github.io/Extrusion_app/" target="_blank">
+            <i class="fas fa-arrow-alt-circle-right btn-icon"></i>
+            <span class="btn-text">Extrusion</span>
+        </a>
+
+        <a class="btn-link" href="https://chiehs1429.github.io/Calendering/" target="_blank">
+            <i class="fas fa-long-arrow-alt-right btn-icon"></i>
+            <span class="btn-text">Calendering</span>
+        </a>
+
+        <a class="btn-link" href="https://chiehs1429.github.io/CUTTING-Inventory/" target="_blank">
+            <i class="fas fa-location-arrow btn-icon"></i>
+            <span class="btn-text">CUTTING Inventory</span>
+        </a>
+
+        <a class="btn-link" href="https://chiehs1429.github.io/RM-Warehouse/" target="_blank">
+            <i class="fas fa-home btn-icon"></i>
+            <span class="btn-text">RM Warehouse</span>
+        </a>
     </div>
 
 </body>
