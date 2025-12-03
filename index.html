@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部門應用程式網站 (可設定)</title>
+    <title>部門應用程式網站 (優化設定版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -120,7 +120,7 @@
         }
         
         /* ---------------------------------- */
-        /* 3. 手機模式優化 (MEDIA QUERY) */
+        /* 3. 手機模式優化 (MEDIA QUERY - 主頁) */
         /* ---------------------------------- */
         @media (max-width: 768px) {
             
@@ -157,7 +157,7 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            position: fixed; /* 固定在底部 */
+            position: fixed; 
             bottom: 20px;
             right: 20px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
@@ -175,7 +175,7 @@
             top: 0;
             width: 100%; 
             height: 100%; 
-            overflow: auto; 
+            overflow-y: auto; /* 允許垂直滾動 */
             background-color: rgba(0,0,0,0.6); 
         }
 
@@ -189,22 +189,44 @@
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 1; 
+        
+        /* 新增按鈕表單佈局優化 */
+        .new-btn-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* 拆分兩欄 */
+            gap: 10px;
+            align-items: end;
         }
-
-        .close:hover,
-        .close:focus {
-            color: #000;
-            text-decoration: none;
+        
+        /* 將新增按鈕移動到第二行，佔滿兩欄 */
+        .new-btn-form button[type="submit"] {
+            grid-column: 1 / 3; 
+            padding: 12px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
             cursor: pointer;
+            margin-right: 0 !important;
         }
 
+        .new-btn-form label {
+            font-size: 14px;
+            color: #555;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .new-btn-form input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        /* ---------------------------------- */
+        /* 6. 設定列表樣式 */
+        /* ---------------------------------- */
         .setting-item {
             display: flex;
             align-items: center;
@@ -213,14 +235,21 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
+            flex-wrap: wrap; /* 允許換行 */
         }
         
         .setting-item input[type="text"] {
             flex-grow: 1;
             padding: 8px;
             margin-right: 10px;
+            margin-bottom: 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
+            min-width: 100px; /* 確保輸入框不會太窄 */
+        }
+        /* 讓前兩個輸入欄（名稱）在桌機上佔用較少空間 */
+        .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
+            max-width: 150px;
         }
 
         .setting-item .delete-btn {
@@ -231,34 +260,50 @@
             border-radius: 4px;
             cursor: pointer;
         }
-        
-        .new-btn-form input[type="text"], .new-btn-form button {
-            padding: 10px;
-            margin-right: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1; 
         }
 
-        .new-btn-form button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
+        .close:hover, .close:focus {
+            color: #000;
+            text-decoration: none;
             cursor: pointer;
         }
-        
-        /* 手機上調整 Modal 樣式 */
-        @media (max-width: 600px) {
+
+        /* ---------------------------------- */
+        /* 7. 手機模式優化 (MEDIA QUERY - 設定頁面) */
+        /* ---------------------------------- */
+        @media (max-width: 768px) {
+            
+            /* 讓 Modal 幾乎佔滿整個手機畫面 */
             .modal-content {
-                margin: 20px auto;
-                width: 95%;
+                margin: 0;
+                width: 100%;
+                min-height: 100vh;
+                border-radius: 0;
             }
-            .setting-item {
-                flex-direction: column;
-                align-items: stretch;
-            }
+            
+            /* 設定列表中的輸入框也應佔滿一行 */
             .setting-item input[type="text"] {
+                flex-grow: 1;
                 margin-right: 0;
                 margin-bottom: 5px;
+                max-width: none;
+            }
+            
+            .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
+                max-width: none; /* 取消桌面限制 */
+            }
+
+            /* 刪除按鈕單獨一行 */
+            .setting-item .delete-btn {
+                width: 100%;
+                margin-top: 5px;
             }
         }
     </style>
@@ -281,42 +326,51 @@
     <div id="settingsModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2>按鈕設定</h2>
+            <h2>新增專案網址</h2> 
 
-            <h3>新增按鈕</h3>
             <form id="new-btn-form" class="new-btn-form">
-                <input type="text" id="new-name" placeholder="名稱 (中文/英文)" required>
-                <input type="text" id="new-url" placeholder="網址連結 (https://...)" required>
+                <div>
+                    <label for="new-en-name">英文名稱</label>
+                    <input type="text" id="new-en-name" placeholder="Machine-NG" required>
+                </div>
+                <div>
+                    <label for="new-cn-name">中文名稱</label>
+                    <input type="text" id="new-cn-name" placeholder="機械管理 (選填)">
+                </div>
+                <div style="grid-column: 1 / 3;">
+                    <label for="new-url">網址連結</label>
+                    <input type="text" id="new-url" placeholder="https://dereklin1429.github.io/..." required>
+                </div>
                 <button type="submit">新增</button>
             </form>
             
             <hr>
 
-            <h3>現有按鈕列表</h3>
+            <h3>管理現有按鈕</h3>
             <div id="settings-list">
                 </div>
             
-            <p style="margin-top: 15px; color: #666; font-size: 12px;">提示：點擊列表中的文字可直接編輯並自動儲存。使用空格可換行顯示。</p>
+            <p style="margin-top: 15px; color: #666; font-size: 12px;">提示：直接在列表中修改名稱或網址會自動儲存。</p>
         </div>
     </div>
 
 
     <script>
-        // 預設按鈕資料（僅在新使用者首次訪問時使用）
+        // 預設按鈕資料：包含英文名稱 (en) 和中文名稱 (cn)
         const defaultButtons = [
-            { name: "Machine-NG", url: "https://dereklin1429.github.io/Machine-NG/", icon: "fa-arrow-right" },
-            { name: "5S Audit", url: "https://dereklin1429.github.io/5S-audit/", icon: "fa-arrow-circle-right" },
-            { name: "Repair Record\n(維修紀錄)", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-play" },
-            { name: "Periodic Maintenance\n(設備保養)", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-angle-double-right" },
-            { name: "Mixing", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-caret-right" },
-            { name: "Extrusion", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-arrow-alt-circle-right" },
-            { name: "Calendering", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-long-arrow-alt-right" },
-            { name: "CUTTING Inventory", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-location-arrow" },
-            { name: "RM Warehouse", url: "https://chiehs1429.github.io/RM-Warehouse/", icon: "fa-home" }
+            { en: "Machine-NG", cn: "機械管理", url: "https://dereklin1429.github.io/Machine-NG/", icon: "fa-arrow-right" },
+            { en: "5S Audit", cn: "5S 查核", url: "https://dereklin1429.github.io/5S-audit/", icon: "fa-arrow-circle-right" },
+            { en: "Repair Record", cn: "機械維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-play" },
+            { en: "Periodic Maintenance", cn: "設備保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-angle-double-right" },
+            { en: "Mixing", cn: "混料", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-caret-right" },
+            { en: "Extrusion", cn: "押出", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-arrow-alt-circle-right" },
+            { en: "Calendering", cn: "壓延", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-long-arrow-alt-right" },
+            { en: "CUTTING Inventory", cn: "裁切庫存", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-location-arrow" },
+            { en: "RM Warehouse", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-Warehouse/", icon: "fa-home" }
         ];
 
         let appButtons = [];
-        const STORAGE_KEY = 'departmentalAppButtons';
+        const STORAGE_KEY = 'departmentalAppButtonsV2'; // 更改儲存鍵以適應新資料結構 (en/cn)
         const buttonGrid = document.getElementById('button-grid');
         const newBtnForm = document.getElementById('new-btn-form');
         const settingsModal = document.getElementById('settingsModal');
@@ -325,10 +379,8 @@
         function loadButtons() {
             const saved = localStorage.getItem(STORAGE_KEY);
             if (saved) {
-                // 如果 Local Storage 有儲存的資料，則載入
                 appButtons = JSON.parse(saved);
             } else {
-                // 否則使用預設資料
                 appButtons = defaultButtons;
                 saveButtons();
             }
@@ -342,10 +394,13 @@
 
         // 3. 渲染主頁按鈕
         function renderMainButtons() {
-            buttonGrid.innerHTML = ''; // 清空現有按鈕
+            buttonGrid.innerHTML = ''; 
             appButtons.forEach(btn => {
-                // 將換行符號 (\n) 轉換為 <br> 標籤
-                const nameHtml = btn.name.replace(/\n/g, '<br>');
+                // 主頁顯示：英文名稱 + 換行 + 中文名稱 (如果存在)
+                let nameToDisplay = btn.en;
+                if (btn.cn && btn.cn.trim() !== '') {
+                    nameToDisplay += `<br>(${btn.cn.trim()})`;
+                }
                 
                 const link = document.createElement('a');
                 link.className = 'btn-link';
@@ -353,7 +408,7 @@
                 link.target = '_blank';
                 link.innerHTML = `
                     <i class="fas ${btn.icon} btn-icon"></i>
-                    <span class="btn-text">${nameHtml}</span>
+                    <span class="btn-text">${nameToDisplay}</span>
                 `;
                 buttonGrid.appendChild(link);
             });
@@ -366,12 +421,10 @@
             appButtons.forEach((btn, index) => {
                 const item = document.createElement('div');
                 item.className = 'setting-item';
-                
-                // 在設定介面，將換行符號 (\n) 轉換為空格，方便使用者修改
-                const display_name = btn.name.replace(/\n/g, ' '); 
 
                 item.innerHTML = `
-                    <input type="text" value="${display_name}" onchange="updateButton(${index}, 'name', this.value)" placeholder="按鈕名稱">
+                    <input type="text" value="${btn.en}" onchange="updateButton(${index}, 'en', this.value)" placeholder="英文名稱">
+                    <input type="text" value="${btn.cn || ''}" onchange="updateButton(${index}, 'cn', this.value)" placeholder="中文名稱">
                     <input type="text" value="${btn.url}" onchange="updateButton(${index}, 'url', this.value)" placeholder="網址連結">
                     <button class="delete-btn" onclick="deleteButton(${index})">刪除</button>
                 `;
@@ -382,20 +435,20 @@
         // 5. 新增按鈕
         newBtnForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const nameInput = document.getElementById('new-name');
-            const urlInput = document.getElementById('new-url');
+            const enName = document.getElementById('new-en-name').value.trim();
+            const cnName = document.getElementById('new-cn-name').value.trim();
+            const url = document.getElementById('new-url').value.trim();
             
-            const name = nameInput.value.trim();
-            const url = urlInput.value.trim();
-
-            if (!name || !url) return;
+            if (!enName || !url) {
+                alert('英文名稱和網址連結為必填項。');
+                return;
+            }
             
             // 隨機選一個箭頭圖標給新的按鈕
             const randomIcons = ["fa-long-arrow-alt-right", "fa-arrow-right", "fa-angle-right", "fa-chevron-right", "fa-play", "fa-bullseye", "fa-rocket"];
             const icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
 
-            // 將輸入的空格轉換為換行符號 \n
-            const newBtn = { name: name.replace(/ /g, '\n'), url: url, icon };
+            const newBtn = { en: enName, cn: cnName, url: url, icon };
             
             appButtons.push(newBtn);
             saveButtons();
@@ -403,13 +456,13 @@
             renderSettingsList();
             
             // 清空表單
-            nameInput.value = '';
-            urlInput.value = '';
+            newBtnForm.reset();
         });
 
         // 6. 刪除按鈕
         function deleteButton(index) {
-            if (confirm(`確定要刪除按鈕 "${appButtons[index].name.replace(/\n/g, ' ')}" 嗎？`)) {
+            const name = appButtons[index].en + (appButtons[index].cn ? `(${appButtons[index].cn})` : '');
+            if (confirm(`確定要刪除按鈕 "${name}" 嗎？`)) {
                 appButtons.splice(index, 1);
                 saveButtons();
                 renderMainButtons();
@@ -420,9 +473,10 @@
         // 7. 更新按鈕名稱或網址
         function updateButton(index, field, value) {
             value = value.trim();
-            if (field === 'name') {
-                // 將設定頁面輸入的空格轉換為換行符號，以便在主頁顯示兩行
-                appButtons[index].name = value.replace(/ /g, '\n');
+            if (field === 'en') {
+                appButtons[index].en = value;
+            } else if (field === 'cn') {
+                appButtons[index].cn = value;
             } else if (field === 'url') {
                 appButtons[index].url = value;
             }
@@ -432,8 +486,12 @@
         
         // 8. Modal 彈窗控制
         function openModal() {
-            renderSettingsList(); // 每次打開時都重新渲染列表，確保是最新的
+            renderSettingsList(); 
             settingsModal.style.display = "block";
+            // 確保手機模式下， Modal 內容滾動條在頂部
+            if (window.innerWidth <= 768) {
+                settingsModal.querySelector('.modal-content').scrollTop = 0;
+            }
         }
 
         function closeModal() {
