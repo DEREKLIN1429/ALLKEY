@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部門應用程式網站</title>
+    <title>部門應用程式網站 (手機優化版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
         /* ---------------------------------- */
-        /* 1. 基本設定與佈局 (3x3 網格) */
+        /* 1. 基本設定與佈局 */
         /* ---------------------------------- */
 
         body {
-            background-color: #A9A9A9; /* 保持中性灰色背景 */
+            background-color: #A9A9A9; 
             display: flex;
             flex-direction: column;
             align-items: center;
             font-family: Arial, sans-serif;
-            padding: 30px;
+            padding: 30px 10px; /* 稍微減少左右邊距 */
             margin: 0;
             min-height: 100vh;
         }
@@ -25,13 +25,16 @@
         h1 {
             color: #444;
             margin-bottom: 40px;
+            text-align: center;
+            font-size: 24px; /* 手機上標題小一點 */
         }
 
+        /* 桌面版網格設置 */
         .button-grid {
             display: flex;
             flex-wrap: wrap; 
-            width: 720px; /* 3 個按鈕 (200px) + 間距 (2 x 60px) */
-            gap: 60px; /* 按鈕之間的間距 */
+            width: 720px; /* 桌面寬度 */
+            gap: 60px; 
             justify-content: center;
         }
 
@@ -42,13 +45,13 @@
         .btn-link {
             width: 200px;
             height: 200px;
-            text-decoration: none; /* 移除超連結下劃線 */
-            color: #fff; /* 文字和圖標顏色 */
-            border-radius: 20px; /* 圓角 */
+            text-decoration: none; 
+            color: #fff; 
+            border-radius: 20px; 
             cursor: pointer;
             box-sizing: border-box; 
-            position: relative; /* 用於陰影 */
-            overflow: hidden; /* 確保高光不溢出 */
+            position: relative; 
+            overflow: hidden; 
             
             /* 內容垂直水平居中 */
             display: flex;
@@ -58,7 +61,7 @@
             text-align: center;
 
             /* 陰影和懸浮效果 */
-            box-shadow: 0 4px 0 #D46900; /* 底部陰影 */
+            box-shadow: 0 4px 0 #D46900; 
             transition: transform 0.1s, box-shadow 0.1s;
 
             /* 橘色漸變背景 (模擬圖片二) */
@@ -66,11 +69,10 @@
         }
 
         .btn-link:hover {
-            transform: translateY(2px); /* 點擊/懸停時下壓效果 */
+            transform: translateY(2px); 
             box-shadow: 0 2px 0 #D46900;
         }
 
-        /* 點擊時的下壓效果 */
         .btn-link:active {
             transform: translateY(4px);
             box-shadow: 0 0 0 #D46900;
@@ -81,9 +83,9 @@
         /* ---------------------------------- */
 
         .btn-icon {
-            font-size: 80px; /* 圖標大小 */
+            font-size: 80px; 
             margin-bottom: 5px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* 輕微文字陰影 */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); 
         }
         
         .btn-text {
@@ -91,7 +93,7 @@
             font-weight: bold;
             line-height: 1.2;
             padding: 0 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* 輕微文字陰影 */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); 
         }
 
         /* ---------------------------------- */
@@ -106,14 +108,44 @@
             width: 100%;
             height: 100%;
             border-radius: 20px;
-            /* 創造高光反射效果 (使用線性漸變) */
             background: linear-gradient(
                 to bottom,
                 rgba(255, 255, 255, 0.5) 0%,
                 rgba(255, 255, 255, 0.0) 50%,
                 rgba(255, 255, 255, 0.1) 100%
             );
-            pointer-events: none; /* 讓點擊事件穿透高光層 */
+            pointer-events: none;
+        }
+
+        /* ---------------------------------- */
+        /* 5. 手機模式優化 (MEDIA QUERY) */
+        /* ---------------------------------- */
+        /* 當螢幕寬度小於或等於 768px 時執行以下樣式 */
+        @media (max-width: 768px) {
+            
+            /* 調整網格容器寬度以適應手機畫面，並使用 2x2 佈局 */
+            .button-grid {
+                width: 100%; /* 佔滿可用寬度 */
+                max-width: 480px; /* 限制最大寬度，避免在平板上過寬 */
+                gap: 20px; /* 縮小按鈕間距 */
+                padding: 0 10px;
+            }
+
+            /* 調整按鈕尺寸，讓兩個按鈕可以並排 */
+            .btn-link {
+                width: calc(50% - 10px); /* 計算公式：(50% 寬度 - 半個間距) */
+                height: 140px; /* 縮小按鈕高度 */
+                border-radius: 15px; /* 縮小圓角 */
+            }
+
+            /* 調整手機上的文字和圖標大小 */
+            .btn-icon {
+                font-size: 50px; 
+            }
+
+            .btn-text {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
@@ -134,12 +166,12 @@
 
         <a class="btn-link" href="https://dereklin1429.github.io/repair-history/" target="_blank">
             <i class="fas fa-play btn-icon"></i>
-            <span class="btn-text">Repair Record<br>(機械維修紀錄)</span>
+            <span class="btn-text">Repair Record<br>(維修紀錄)</span>
         </a>
 
         <a class="btn-link" href="https://dereklin1429.github.io/-MC-maintenance-check/" target="_blank">
             <i class="fas fa-angle-double-right btn-icon"></i>
-            <span class="btn-text">Periodic Maintenance<br>(設備保養查核)</span>
+            <span class="btn-text">Periodic Maintenance<br>(設備保養)</span>
         </a>
 
         <a class="btn-link" href="https://chiehs1429.github.io/Mixing/" target="_blank">
