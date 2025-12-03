@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>部門應用程式網站 (安全與介面優化版)</title>
+    <title>部門應用程式網站 (優化與密碼儲存版)</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
@@ -48,16 +48,14 @@
             width: 720px; 
             gap: 60px; 
             justify-content: center;
-            /* 調整 margin-bottom 以為底部的設定按鈕留出空間 */
-            margin-bottom: 120px; 
+            margin-bottom: 40px; 
         }
 
         /* ---------------------------------- */
-        /* 2. 主頁按鈕 (連結) 的通用樣式 (網址按鈕 & 設定按鈕 共用) */
+        /* 2. 主頁按鈕 (連結) 的通用樣式 */
         /* ---------------------------------- */
 
         .btn-style {
-            /* 基礎尺寸和排版 */
             width: 200px;
             height: 200px;
             text-decoration: none; 
@@ -127,52 +125,30 @@
         }
         
         /* ---------------------------------- */
-        /* 4. 設定按鈕樣式 (置底置中) */
+        /* 4. 設定按鈕樣式 (右下角齒輪圖標) */
         /* ---------------------------------- */
-        #settings-btn-wrapper {
-            /* 讓設定按鈕固定在畫面底部置中 */
+        #settings-btn {
+            /* 讓設定按鈕固定在畫面右下角 */
             position: fixed;
             bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
+            right: 20px;
+            width: 50px; /* 尺寸縮小 */
+            height: 50px;
+            border-radius: 50%; /* 圓形按鈕 */
+            background-color: #555;
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             z-index: 100;
-        }
 
-        #settings-btn {
-            /* 讓設定按鈕套用與網址按鈕相同的樣式 */
-            width: 180px; /* 稍微小一點 */
-            height: 60px;
-            font-size: 18px;
-            font-weight: bold;
             display: flex;
-            flex-direction: row;
             align-items: center;
             justify-content: center;
-            padding: 0;
-            margin: 0;
-            /* 覆寫網址按鈕的通用樣式以適應尺寸 */
-            border-radius: 10px;
-            box-shadow: 0 3px 0 #D46900; 
         }
 
         #settings-btn i {
-            font-size: 20px;
-            margin-right: 8px;
-        }
-        
-        #settings-btn:hover {
-            transform: translateY(1px); 
-            box-shadow: 0 2px 0 #D46900;
-        }
-
-        #settings-btn:active {
-            transform: translateY(3px);
-            box-shadow: 0 0 0 #D46900;
-        }
-        
-        #settings-btn::before {
-             border-radius: 10px; /* 匹配按鈕新的圓角 */
+            font-size: 24px; /* 齒輪圖標大小 */
         }
         
         /* ---------------------------------- */
@@ -185,8 +161,6 @@
                 max-width: 480px; 
                 gap: 20px; 
                 padding: 0 10px;
-                /* 確保手機底部有空間顯示設定按鈕 */
-                margin-bottom: 100px;
             }
 
             .btn-style {
@@ -202,15 +176,10 @@
             .btn-text {
                 font-size: 14px;
             }
-            
-            .header-container {
-                /* 移除為右上角設定按鈕預留的空間 */
-                padding-right: 0; 
-            }
         }
         
         /* ---------------------------------- */
-        /* 6. Modal / 設定列表 / 表單 樣式 (與上次相同) */
+        /* 6. Modal / 設定列表 / 表單 樣式 */
         /* ---------------------------------- */
         .modal {
             display: none; 
@@ -235,11 +204,25 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         
+        /* 新增按鈕表單佈局優化 */
         .new-btn-form {
             display: grid;
             grid-template-columns: 1fr 1fr; 
             gap: 10px;
             align-items: end;
+        }
+        
+        /* 儲存返回按鈕 (新增) */
+        #save-and-return-btn {
+            grid-column: 1 / 3; 
+            padding: 12px 10px;
+            background-color: #007bff; /* 藍色，區別於綠色新增 */
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-weight: bold;
         }
         
         .new-btn-form button[type="submit"] {
@@ -266,55 +249,10 @@
             border-radius: 4px;
             border: 1px solid #ccc;
         }
-        
-        .setting-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            flex-wrap: wrap; 
-        }
-        
-        .setting-item input[type="text"] {
-            flex-grow: 1;
-            padding: 8px;
-            margin-right: 10px;
-            margin-bottom: 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            min-width: 100px; 
-        }
 
-        .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
-            max-width: 150px;
-        }
-
-        .setting-item .delete-btn {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            line-height: 1; 
-        }
-
-        .close:hover, .close:focus {
-            color: #000;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
+        /* ---------------------------------- */
+        /* 7. 手機模式優化 (MEDIA QUERY - 設定頁面) */
+        /* ---------------------------------- */
         @media (max-width: 768px) {
             
             .modal-content {
@@ -352,16 +290,13 @@
     <div class="button-grid" id="button-grid">
         </div>
     
-    <div id="settings-btn-wrapper">
-        <button id="settings-btn" class="btn-style" onclick="authenticateAndOpenModal()">
-            <i class="fas fa-cog"></i> 設定
-        </button>
-    </div>
+    <button id="settings-btn" onclick="authenticateAndOpenModal()">
+        <i class="fas fa-cog"></i>
+    </button>
     
 
     <div id="settingsModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
             <h2>新增專案網址</h2> 
 
             <form id="new-btn-form" class="new-btn-form">
@@ -387,29 +322,24 @@
                 </div>
             
             <p style="margin-top: 15px; color: #666; font-size: 12px;">提示：直接在列表中修改名稱或網址會自動儲存。</p>
+            
+            <button id="save-and-return-btn" onclick="savePasswordAndClose()">
+                <i class="fas fa-save"></i> 儲存並返回 (自動記錄密碼)
+            </button>
+            
         </div>
     </div>
 
 
     <script>
-        // 預設密碼 (請自行修改，例如改成複雜的數字/英文字母組合)
-        const SETTINGS_PASSWORD = "1429"; 
+        // 預設密碼 (如果 Local Storage 沒有儲存密碼，則使用此預設值)
+        const DEFAULT_PASSWORD = "1429"; 
         
-        // 預設按鈕資料：包含英文名稱 (en) 和中文名稱 (cn)
-        const defaultButtons = [
-            { en: "Machine-NG", cn: "機械管理", url: "https://dereklin1429.github.io/Machine-NG/", icon: "fa-arrow-right" },
-            { en: "5S Audit", cn: "5S 查核", url: "https://dereklin1429.github.io/5S-audit/", icon: "fa-arrow-circle-right" },
-            { en: "Repair Record", cn: "機械維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-play" },
-            { en: "Periodic Maintenance", cn: "設備保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-angle-double-right" },
-            { en: "Mixing", cn: "混料", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-caret-right" },
-            { en: "Extrusion", cn: "押出", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-arrow-alt-circle-right" },
-            { en: "Calendering", cn: "壓延", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-long-arrow-alt-right" },
-            { en: "CUTTING Inventory", cn: "裁切庫存", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-location-arrow" },
-            { en: "RM Warehouse", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-Warehouse/", icon: "fa-home" }
-        ];
-
         let appButtons = [];
-        const STORAGE_KEY = 'departmentalAppButtonsV2'; // 儲存鍵
+        // Local Storage Keys
+        const STORAGE_KEY = 'departmentalAppButtonsV2';
+        const STORED_PASSWORD_KEY = 'settingsStoredPassword'; // 用於儲存自動登入密碼
+
         const buttonGrid = document.getElementById('button-grid');
         const newBtnForm = document.getElementById('new-btn-form');
         const settingsModal = document.getElementById('settingsModal');
@@ -435,13 +365,11 @@
         function renderMainButtons() {
             buttonGrid.innerHTML = ''; 
             appButtons.forEach(btn => {
-                // 主頁顯示：英文名稱 + 換行 + 中文名稱 (如果存在)
                 let nameToDisplay = btn.en;
                 if (btn.cn && btn.cn.trim() !== '') {
                     nameToDisplay += `<br>(${btn.cn.trim()})`;
                 }
                 
-                // 使用 btn-style 樣式類別
                 const link = document.createElement('a');
                 link.className = 'btn-style'; 
                 link.href = btn.url;
@@ -484,7 +412,6 @@
                 return;
             }
             
-            // 隨機選一個箭頭圖標給新的按鈕
             const randomIcons = ["fa-long-arrow-alt-right", "fa-arrow-right", "fa-angle-right", "fa-chevron-right", "fa-play", "fa-bullseye", "fa-rocket"];
             const icon = randomIcons[Math.floor(Math.random() * randomIcons.length)];
 
@@ -524,7 +451,7 @@
             renderMainButtons();
         }
         
-        // 8. Modal 彈窗控制 (已修改：加入密碼認證模擬)
+        // 8. Modal 彈窗控制 (加入密碼儲存和自動登入邏輯)
 
         // 彈出 Modal 視窗
         function openModal() {
@@ -540,18 +467,53 @@
             settingsModal.style.display = "none";
         }
         
-        // 【新增函數】處理密碼認證邏輯 (模擬 QR/指紋認證)
+        // 【新增函數】儲存密碼並關閉 Modal
+        function savePasswordAndClose() {
+            // 在關閉前，確保所有設定變更已儲存 (updateButton 已經即時儲存了，這裡只是額外確保)
+            saveButtons(); 
+            
+            // 彈出提示，詢問是否要儲存密碼
+            if (confirm("是否要將本次使用的密碼儲存於此瀏覽器？儲存後下次將自動進入設定頁面。")) {
+                // 如果用戶同意，我們將當前密碼（在 authenticateAndOpenModal 成功後使用的密碼）存入 Local Storage。
+                // 由於密碼是存在一個臨時變數或直接由 prompt 取得，這裡我們假設用戶想要儲存的密碼是 DEFAULT_PASSWORD，
+                // 或者是用戶這次成功輸入的密碼。
+                
+                // 為了簡化邏輯，我們只在用戶明確點擊「儲存返回」時，將 DEFAULT_PASSWORD 設為「已儲存」。
+                // **【安全警告】** 靜態網頁無法安全儲存密碼。此處只是利用 Local Storage 實現**跳過認證**的流程。
+                
+                // 我們在 Local Storage 中儲存一個特殊的旗標或密碼本身。
+                localStorage.setItem(STORED_PASSWORD_KEY, DEFAULT_PASSWORD); 
+                alert("密碼已儲存。下次訪問將自動登入。");
+            } else {
+                // 如果用戶取消儲存，則清除 Local Storage 中的密碼
+                localStorage.removeItem(STORED_PASSWORD_KEY);
+                alert("密碼未儲存。下次仍需手動輸入。");
+            }
+            
+            closeModal();
+        }
+
+        
+        // 處理密碼認證邏輯
         function authenticateAndOpenModal() {
+            const storedPassword = localStorage.getItem(STORED_PASSWORD_KEY);
+            
+            if (storedPassword === DEFAULT_PASSWORD) {
+                // 1. 自動登入：如果 Local Storage 內有儲存且正確的密碼
+                openModal();
+                return;
+            }
+
+            // 2. 手動認證：如果沒有儲存密碼或儲存的密碼不符 (但此處只檢查是否有旗標)
             const password = prompt("請輸入管理密碼進入設定頁面：");
             
-            if (password === SETTINGS_PASSWORD) {
+            if (password === DEFAULT_PASSWORD) {
                 // 密碼正確
                 openModal();
             } else if (password !== null) {
                 // 輸入錯誤
                 alert("密碼錯誤，無法進入設定頁面。");
             }
-            // 如果 password 是 null (使用者按取消)，則不執行任何操作
         }
 
         // 點擊 Modal 外部關閉
