@@ -128,13 +128,12 @@
         /* 4. 設定按鈕樣式 (右下角齒輪圖標) */
         /* ---------------------------------- */
         #settings-btn {
-            /* 讓設定按鈕固定在畫面右下角 */
             position: fixed;
             bottom: 20px;
             right: 20px;
-            width: 50px; /* 尺寸縮小 */
+            width: 50px; 
             height: 50px;
-            border-radius: 50%; /* 圓形按鈕 */
+            border-radius: 50%; 
             background-color: #555;
             color: white;
             border: none;
@@ -148,7 +147,7 @@
         }
 
         #settings-btn i {
-            font-size: 24px; /* 齒輪圖標大小 */
+            font-size: 24px; 
         }
         
         /* ---------------------------------- */
@@ -225,6 +224,7 @@
             font-weight: bold;
         }
         
+        /* 新增按鈕 (submit) - 桌面版佔滿兩欄 */
         .new-btn-form button[type="submit"] {
             grid-column: 1 / 3; 
             padding: 12px 10px;
@@ -251,7 +251,58 @@
         }
 
         /* ---------------------------------- */
-        /* 7. 手機模式優化 (MEDIA QUERY - 設定頁面) */
+        /* 7. 設定列表樣式 */
+        /* ---------------------------------- */
+        .setting-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            flex-wrap: wrap; 
+        }
+        
+        .setting-item input[type="text"] {
+            flex-grow: 1;
+            padding: 8px;
+            margin-right: 10px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-width: 100px; 
+        }
+
+        .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
+            max-width: 150px;
+        }
+
+        .setting-item .delete-btn {
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            line-height: 1; 
+        }
+
+        .close:hover, .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        /* ---------------------------------- */
+        /* 8. 手機模式優化 (MEDIA QUERY - 設定頁面) */
         /* ---------------------------------- */
         @media (max-width: 768px) {
             
@@ -273,13 +324,17 @@
                 max-width: none; 
             }
 
-            /* 【修正點】刪除按鈕寬度縮小 50% */
+            /* 【修正 1】刪除按鈕寬度縮小 20% 並置中 */
             .setting-item .delete-btn {
-                width: 50%; /* 從 100% 縮小到 50% */
-                margin-top: 5px;
-                /* 讓按鈕靠右 */
-                margin-left: auto; 
-                display: block; 
+                width: 80%; /* 縮小 20% */
+                margin: 5px auto 0 auto; /* 置中 */
+                display: block; /* 讓 margin auto 生效 */
+            }
+
+            /* 【修正 2】新增按鈕寬度縮小 20% 並置中 */
+            .new-btn-form button[type="submit"] {
+                width: 80%; /* 縮小 20% */
+                margin: 0 auto; /* 置中 */
             }
         }
     </style>
@@ -339,6 +394,19 @@
         // 預設密碼 (如果 Local Storage 沒有儲存密碼，則使用此預設值)
         const DEFAULT_PASSWORD = "1429"; 
         
+        // 預設按鈕資料：包含英文名稱 (en) 和中文名稱 (cn)
+        const defaultButtons = [
+            { en: "Machine-NG", cn: "機械管理", url: "https://dereklin1429.github.io/Machine-NG/", icon: "fa-arrow-right" },
+            { en: "5S Audit", cn: "5S 查核", url: "https://dereklin1429.github.io/5S-audit/", icon: "fa-arrow-circle-right" },
+            { en: "Repair Record", cn: "機械維修紀錄", url: "https://dereklin1429.github.io/repair-history/", icon: "fa-play" },
+            { en: "Periodic Maintenance", cn: "設備保養查核", url: "https://dereklin1429.github.io/-MC-maintenance-check/", icon: "fa-angle-double-right" },
+            { en: "Mixing", cn: "混料", url: "https://chiehs1429.github.io/Mixing/", icon: "fa-caret-right" },
+            { en: "Extrusion", cn: "押出", url: "https://chiehs1429.github.io/Extrusion_app/", icon: "fa-arrow-alt-circle-right" },
+            { en: "Calendering", cn: "壓延", url: "https://chiehs1429.github.io/Calendering/", icon: "fa-long-arrow-alt-right" },
+            { en: "CUTTING Inventory", cn: "裁切庫存", url: "https://chiehs1429.github.io/CUTTING-Inventory/", icon: "fa-location-arrow" },
+            { en: "RM Warehouse", cn: "原物料倉庫", url: "https://chiehs1429.github.io/RM-Warehouse/", icon: "fa-home" }
+        ];
+
         let appButtons = [];
         // Local Storage Keys
         const STORAGE_KEY = 'departmentalAppButtonsV2';
@@ -347,7 +415,7 @@
         const buttonGrid = document.getElementById('button-grid');
         const newBtnForm = document.getElementById('new-btn-form');
         const settingsModal = document.getElementById('settingsModal');
-        
+
         // 1. 初始化和讀取資料
         function loadButtons() {
             const saved = localStorage.getItem(STORAGE_KEY);
@@ -471,15 +539,17 @@
             settingsModal.style.display = "none";
         }
         
-        // 【修正函數】儲存密碼並關閉 Modal (點擊「儲存返回」)
+        // 儲存密碼並關閉 Modal
         function savePasswordAndClose() {
+            // 確保所有設定變更已儲存
             saveButtons(); 
             
-            // 詢問是否儲存密碼（用戶同意即儲存 DEFAULT_PASSWORD，實現自動登入）
             if (confirm("是否要將本次使用的密碼儲存於此瀏覽器？儲存後下次將自動進入設定頁面。")) {
+                // 儲存密碼標記
                 localStorage.setItem(STORED_PASSWORD_KEY, DEFAULT_PASSWORD); 
                 alert("密碼已儲存。下次訪問將自動登入。");
             } else {
+                // 清除密碼標記
                 localStorage.removeItem(STORED_PASSWORD_KEY);
                 alert("密碼未儲存。下次仍需手動輸入。");
             }
@@ -510,10 +580,9 @@
             }
         }
 
-        // 點擊 Modal 外部關閉 (與儲存返回按鈕功能重疊，這裡只處理 Modal 外部點擊)
+        // 點擊 Modal 外部關閉
         window.onclick = function(event) {
             if (event.target == settingsModal) {
-                // 如果用戶點擊 Modal 外部，則直接關閉，不進行密碼儲存操作
                 closeModal();
             }
         }
