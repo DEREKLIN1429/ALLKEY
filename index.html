@@ -20,6 +20,7 @@
             padding: 30px 10px;
             margin: 0;
             min-height: 100vh;
+            position: relative; /* 確保 #settings-btn 的 absolute 定位是相對於 body */
         }
 
         .header-container {
@@ -147,7 +148,7 @@
         }
         
         /* ---------------------------------- */
-        /* 4. 設定按鈕樣式 */
+        /* 4. 設定按鈕樣式 (已修改為右上角) */
         /* ---------------------------------- */
         #settings-btn {
             background-color: #555;
@@ -157,11 +158,25 @@
             border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            position: fixed; 
-            bottom: 20px;
-            right: 20px;
+            
+            /* 【修正為右上角】 */
+            position: absolute; 
+            top: 30px; 
+            right: 20px; 
+            
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             z-index: 100;
+        }
+        /* 在手機模式下，確保它不會與標題重疊 */
+        @media (max-width: 768px) {
+            #settings-btn {
+                top: 15px;
+                padding: 8px 15px;
+            }
+            .header-container {
+                /* 在手機上給標題留出右邊空間 */
+                padding-right: 80px; 
+            }
         }
 
         /* ---------------------------------- */
@@ -175,7 +190,7 @@
             top: 0;
             width: 100%; 
             height: 100%; 
-            overflow-y: auto; /* 允許垂直滾動 */
+            overflow-y: auto; 
             background-color: rgba(0,0,0,0.6); 
         }
 
@@ -193,7 +208,7 @@
         /* 新增按鈕表單佈局優化 */
         .new-btn-form {
             display: grid;
-            grid-template-columns: 1fr 1fr; /* 拆分兩欄 */
+            grid-template-columns: 1fr 1fr; 
             gap: 10px;
             align-items: end;
         }
@@ -235,7 +250,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
-            flex-wrap: wrap; /* 允許換行 */
+            flex-wrap: wrap; 
         }
         
         .setting-item input[type="text"] {
@@ -245,7 +260,7 @@
             margin-bottom: 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
-            min-width: 100px; /* 確保輸入框不會太窄 */
+            min-width: 100px; 
         }
         /* 讓前兩個輸入欄（名稱）在桌機上佔用較少空間 */
         .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
@@ -297,7 +312,7 @@
             }
             
             .setting-item input:nth-child(1), .setting-item input:nth-child(2) {
-                max-width: none; /* 取消桌面限制 */
+                max-width: none; 
             }
 
             /* 刪除按鈕單獨一行 */
@@ -370,7 +385,7 @@
         ];
 
         let appButtons = [];
-        const STORAGE_KEY = 'departmentalAppButtonsV2'; // 更改儲存鍵以適應新資料結構 (en/cn)
+        const STORAGE_KEY = 'departmentalAppButtonsV2'; // 儲存鍵
         const buttonGrid = document.getElementById('button-grid');
         const newBtnForm = document.getElementById('new-btn-form');
         const settingsModal = document.getElementById('settingsModal');
